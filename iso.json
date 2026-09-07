@@ -2,13 +2,30 @@
     {
         "title": "Windows 10 22H2",
         "link": "https://archive.org/download/windows-10-22h2-englishus/Win10_22H2_English_x64.iso",
-        "build": 19045.2006,
+        "build": 19045,
+        "architecture": "x64",
         "language": "English"
     },
     {
         "title": "Windows 11 25H2",
         "link": "https://archive.org/download/win1125H2_official/MCT_Win11_25H2_English_x64.iso",
-        "build": 26200.6899,
+        "build": 26200,
+        "architecture": "x64",
+        "language": "English"
+    },
+    {
+        "title": "Windows 8.1",
+        "link": "https://archive.org/download/win-8.1-english-x-64_20211019/Win8.1_English_x64.iso",
+        "build": 0,
+        "architecture": "x64",
+        "language": "English"
+
+    },
+    {
+        "title": "Windows 8.1",
+        "link": "https://archive.org/download/win-8.1-english-x-64_20211019/Win8.1_English_x32.iso",
+        "build": 0,
+        "architecture": "x86",
         "language": "English"
     }
 ]

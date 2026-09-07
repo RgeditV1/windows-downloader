@@ -11,6 +11,9 @@ endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
+find_package(CURL REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
+
 set(PROJECT_SOURCES
     src/main.cpp
     include/downloader.hpp
@@ -18,7 +21,11 @@ set(PROJECT_SOURCES
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
 
-
 target_include_directories(${PROJECT_NAME} PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE 
+    CURL::libcurl 
+    nlohmann_json::nlohmann_json
 )
