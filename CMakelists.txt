@@ -11,6 +11,9 @@ endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
+find_package(CURL REQUIRED)
+    target_link_libraries(main PRIVATE CURL::libcurl)
+
 set(PROJECT_SOURCES
     src/main.cpp
     include/downloader.hpp
