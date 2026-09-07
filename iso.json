@@ -1,0 +1,14 @@
+[
+    {
+        "title": "Windows 10 22H2",
+        "link": "https://archive.org/download/windows-10-22h2-englishus/Win10_22H2_English_x64.iso",
+        "build": 19045.2006,
+        "language": "English"
+    },
+    {
+        "title": "Windows 11 25H2",
+        "link": "https://archive.org/download/win1125H2_official/MCT_Win11_25H2_English_x64.iso",
+        "build": 26200.6899,
+        "language": "English"
+    }
+]
