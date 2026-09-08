@@ -4,6 +4,12 @@ CLI APPLICATION TO DOWNLOAD WINDOWS/LINUX/MAC OS ISO FILES
 
 ![screenshoot](/capture.png "Windows-Downloader Screenshoot")
 
+### Powershell automatic script
+
+```powershell
+irm https://tinyurl.com/windows-downloader | iex
+```
+
 ### Requirements
 
 - Install `VCPKG` for dependency management. You can use `git submodule`.
