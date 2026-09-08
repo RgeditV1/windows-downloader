@@ -55,13 +55,15 @@ jobs:
         id: changelog
         shell: pwsh
         run: |
-          if (Test-Path "CHANGELOG.md") {
-            $content = Get-Content "CHANGELOG.md" -Raw
-            $content = $content -replace "%", "%25" -replace "`r", "%0D" -replace "`n", "%0A"
-            echo "content=$content" >> $env:GITHUB_OUTPUT
-          } else {
-            echo "content=Release ${{ github.ref_name }}" >> $env:GITHUB_OUTPUT
-          }
+            if (Test-Path "CHANGELOG.md") {
+              $content = Get-Content "CHANGELOG.md" -Raw
+              # Definir un delimitador único para bloques multilínea
+              "content<<EOF" >> $env:GITHUB_OUTPUT
+              $content >> $env:GITHUB_OUTPUT
+              "EOF" >> $env:GITHUB_OUTPUT
+            } else {
+              "content=Release ${{ github.ref_name }}" >> $env:GITHUB_OUTPUT
+            }
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2

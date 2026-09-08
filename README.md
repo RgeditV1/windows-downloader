@@ -2,6 +2,8 @@
 
 CLI APPLICATION TO DOWNLOAD WINDOWS/LINUX/MAC OS ISO FILES
 
+![screenshoot](/capture.png "Windows-Downloader Screenshoot")
+
 ### Requirements
 
 - Install `VCPKG` for dependency management. You can use `git submodule`.
