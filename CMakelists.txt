@@ -16,6 +16,8 @@ find_package(nlohmann_json CONFIG REQUIRED)
 
 set(PROJECT_SOURCES
     src/main.cpp
+    src/cli.cpp
+    include/cli.hpp
     include/downloader.hpp
 )
 
