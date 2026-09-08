@@ -1,0 +1,72 @@
+name: Build & Release Windows Downloader
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: VCPKG cache config
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/vcpkg
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json') }}
+          restore-keys: |
+            ${{ runner.os }}-vcpkg-
+
+      - name: dep installs with vcpkg
+        run: |
+          vcpkg install curl:x64-windows nlohmann-json:x64-windows
+
+      - name: CMake config
+        run: |
+          cmake -B build -S . `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
+
+      - name: Build Proyect
+        run: |
+          cmake --build build --config Release
+
+      - name: Compress Release Directory
+        run: |
+          # Identificar la carpeta Release (build/Release o build en caso de Single-Config)
+          if (Test-Path build/Release) {
+            Compress-Archive -Path build/Release/* -DestinationPath ./windows-downloader.zip
+          } else {
+            Compress-Archive -Path build/* -DestinationPath ./windows-downloader.zip
+          }
+
+      - name: Read CHANGELOG.md
+        id: changelog
+        shell: pwsh
+        run: |
+          if (Test-Path "CHANGELOG.md") {
+            $content = Get-Content "CHANGELOG.md" -Raw
+            $content = $content -replace "%", "%25" -replace "`r", "%0D" -replace "`n", "%0A"
+            echo "content=$content" >> $env:GITHUB_OUTPUT
+          } else {
+            echo "content=Release ${{ github.ref_name }}" >> $env:GITHUB_OUTPUT
+          }
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: windows-downloader.zip
+          body: ${{ steps.changelog.outputs.content }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,14 +1,18 @@
 # windows-downloader
-CLI APLICATION TO DOWNLOAD WINDOWS/LINUX/MAC OS
 
-###  Requerimientos
-- Instala ``VCPKG`` para el manejo de dependencias, puedes usar ``git submodule``
-- Con ``vcpkg`` instala ``Libcurl`` y ``nlohmann_json``
+CLI APPLICATION TO DOWNLOAD WINDOWS/LINUX/MAC OS ISO FILES
 
-### Instalacion de Requerimientos con VCPKG
+### Requirements
+
+- Install `VCPKG` for dependency management. You can use `git submodule`.
+- Install `Libcurl` and `nlohmann_json` using `vcpkg`.
+
+### Installing Requirements with VCPKG
+
 ```powershell
-
 cd 3rdparty/vcpkg
+
 .\vcpkg install curl
+
 .\vcpkg install nlohmann-json:x64-windows
 ```
