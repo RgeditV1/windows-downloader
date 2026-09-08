@@ -1,11 +1,18 @@
+#pragma once
+
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
 #include <iostream>
 #include <string>
 #include <cstdlib>
-
+#include <thread>
+#include <atomic>
+#include <chrono>
 
 #ifdef _WIN32
-#define NOMINMAX
-#include <windows.h>
+#include <conio.h>
 #endif
 
 #include "downloader.hpp"
@@ -40,5 +47,6 @@ namespace MenuConfig {
 void clearScreen();
 void pause();
 void drawMenu();
+void showSpinner(const std::atomic<bool>& loading, const std::string& message);
 void chooseIso(const std::vector<IsoInfo>& isos);
 void checkIsos(const std::vector<IsoInfo>& isos);
