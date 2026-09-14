@@ -121,6 +121,7 @@ void chooseIso(const std::vector<IsoInfo>& isos)
         std::cout << Color::YELLOW << "  [" << (i + 1) << "] " << Color::RESET
                   << Color::WHITE << Color::BOLD << isos[i].title << Color::RESET
                   << Color::BLUE << " (" << isos[i].build << ")" << Color::RESET
+                  << Color::CYAN << " - [" << isos[i].architecture << "]" << Color::RESET
                   << " - " << Color::GREEN << formatFileSize(isos[i].size) << Color::RESET
                   << "\n";
     }

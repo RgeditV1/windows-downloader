@@ -45,14 +45,6 @@ std::filesystem::path getDownloadsFolderPath();
 
 bool downloadIsoFile(const IsoInfo& iso, const std::filesystem::path& destinationFolder);
 
-enum class Architecture {
-    x86,
-    x64,
-    ARM64,
-    Multi,
-    Unknown
-};
-
 struct IsoInfo {
     std::string title;
     std::string url;
