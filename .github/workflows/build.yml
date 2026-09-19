@@ -15,11 +15,20 @@ permissions:
   contents: write
 
 jobs:
-  build-and-release:
-    runs-on: windows-latest
+  build:
+    name: Build (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            artifact_name: windows-downloader-windows.zip
+            triplet: x64-windows
+          - os: ubuntu-latest
+            artifact_name: windows-downloader-linux.tar.gz
+            triplet: x64-linux
 
-    permissions:
-      contents: write
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Code Checkout
@@ -35,48 +44,78 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-vcpkg-
 
-      - name: dep installs with vcpkg
+      - name: Dependencies installs with vcpkg
         run: |
-          vcpkg install curl:x64-windows nlohmann-json:x64-windows
+          vcpkg install curl:${{ matrix.triplet }} nlohmann-json:${{ matrix.triplet }}
 
       - name: CMake config
         run: |
-          cmake -B build -S . `
-            -DCMAKE_BUILD_TYPE=Release `
-            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
+          cmake -B build -S . \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
+        shell: bash
 
-      - name: Build Proyect
+      - name: Build Project
         run: |
           cmake --build build --config Release
 
-      - name: Compress Release Directory
+      - name: Compress Release Directory (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
         run: |
-          # Identificar la carpeta Release (build/Release o build en caso de Single-Config)
-          if (Test-Path build/Release) {
-            Compress-Archive -Path build/Release/* -DestinationPath ./windows-downloader.zip
+          if (Test-Path build/Release/windows-downloader.exe) {
+            Compress-Archive -Path build/Release/windows-downloader.exe -DestinationPath ./${{ matrix.artifact_name }}
           } else {
-            Compress-Archive -Path build/* -DestinationPath ./windows-downloader.zip
+            Compress-Archive -Path build/windows-downloader.exe -DestinationPath ./${{ matrix.artifact_name }}
           }
+
+      - name: Compress Release Directory (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          tar -czvf ./${{ matrix.artifact_name }} -C build windows-downloader
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ./${{ matrix.artifact_name }}
+
+  release:
+    name: Publish Release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+          merge-multiple: true
 
       - name: Read CHANGELOG.md
         id: changelog
         shell: pwsh
         run: |
-            if (Test-Path "CHANGELOG.md") {
-              $content = Get-Content "CHANGELOG.md" -Raw
-              # Definir un delimitador único para bloques multilínea
-              "content<<EOF" >> $env:GITHUB_OUTPUT
-              $content >> $env:GITHUB_OUTPUT
-              "EOF" >> $env:GITHUB_OUTPUT
-            } else {
-              "content=Release ${{ github.ref_name }}" >> $env:GITHUB_OUTPUT
-            }
+          if (Test-Path "CHANGELOG.md") {
+            $content = Get-Content "CHANGELOG.md" -Raw
+            "content<<EOF" >> $env:GITHUB_OUTPUT
+            $content >> $env:GITHUB_OUTPUT
+            "EOF" >> $env:GITHUB_OUTPUT
+          } else {
+            "content=Release ${{ github.ref_name }}" >> $env:GITHUB_OUTPUT
+          }
 
       - name: Publish GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: windows-downloader.zip
+          files: ./artifacts/*
           body: ${{ steps.changelog.outputs.content }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
