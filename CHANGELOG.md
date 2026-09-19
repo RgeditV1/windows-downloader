@@ -1,3 +1,9 @@
+# [v1.2] - 2026-09-19
+
+## Added
+
+- Capable with Gnu/Linux
+
 # [v1.0.1] - 2026-09-13
 
 ## Added
