@@ -8,11 +8,8 @@ CLI APPLICATION TO DOWNLOAD WINDOWS/LINUX/MAC OS ISO FILES
 ### Powershell automatic script
 
 ```powershell
-# Pwsh
+# Pwsh/linux powershell too
 irm https://tinyurl.com/windows-downloader | iex
-
-#Gnu/Linux with powershell
-curl -fsSL https://tinyurl.com/windows-downloader | pwsh -Command -
 
 #Bash
 curl -fsSL https://tinyurl.com/windows-downloader-sh | bash
