@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.0)
+cmake_minimum_required(VERSION 3.20)
 
 project(windows-downloader VERSION 1.0 LANGUAGES CXX)
 
@@ -7,6 +7,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(MSVC)
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+else()
+    #  GCC/Clang GNU/Linux
+    add_compile_options(-Wall -Wextra -pedantic)
 endif()
 
 if(NOT CMAKE_BUILD_TYPE)

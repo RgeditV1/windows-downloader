@@ -1,13 +1,21 @@
 # windows-downloader
 
 CLI APPLICATION TO DOWNLOAD WINDOWS/LINUX/MAC OS ISO FILES
+`GNU/Linux` Supported
 
 ![screenshoot](/capture.png "Windows-Downloader Screenshoot")
 
 ### Powershell automatic script
 
 ```powershell
+# Pwsh
 irm https://tinyurl.com/windows-downloader | iex
+
+#Gnu/Linux with powershell
+curl -fsSL https://tinyurl.com/windows-downloader | pwsh -Command -
+
+#Bash
+curl -fsSL https://tinyurl.com/windows-downloader-sh | bash
 ```
 
 ### Requirements
@@ -22,5 +30,5 @@ cd 3rdparty/vcpkg
 
 .\vcpkg install curl
 
-.\vcpkg install nlohmann-json:x64-windows
+.\vcpkg install nlohmann-json:x64-windows #x64-Linux
 ```

@@ -44,9 +44,11 @@ namespace MenuConfig {
         "Salir";
 }
 
-void clearScreen();
-void pause();
-void drawMenu();
-void showSpinner(const std::atomic<bool>& loading, const std::string& message);
-void chooseIso(const std::vector<IsoInfo>& isos);
-void checkIsos(const std::vector<IsoInfo>& isos);
+namespace CLI{
+    void clearScreen();
+    void pause();
+    void drawMenu();
+    void showSpinner(const std::atomic<bool>& loading, const std::string& message);
+    void chooseIso(const std::vector<IsoInfo>& isos);
+    void checkIsos(const std::vector<IsoInfo>& isos);
+}

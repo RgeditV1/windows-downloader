@@ -230,13 +230,13 @@ int main() {
     }
 #endif
 
-    clearScreen();
+    CLI::clearScreen();
 
     std::atomic<bool> loading(true);
     std::vector<IsoInfo> isos;
 
     // Iniciar la animación del spinner en un hilo secundario
-    std::thread spinnerThread(showSpinner, std::ref(loading), "Cargando información de ISOs...");
+    std::thread spinnerThread(CLI::showSpinner, std::ref(loading), "Cargando información de ISOs...");
 
     InitCurl();
 
@@ -251,7 +251,7 @@ int main() {
             loading = false;
             if (spinnerThread.joinable()) spinnerThread.join();
             std::cerr << "JSON error: " << e.what() << '\n';
-            pause();
+            CLI::pause();
             return 1;
         }
     }
@@ -265,15 +265,15 @@ int main() {
     if (result != CURLE_OK)
     {
         std::cout << Color::RED << "Error de Conexion.\n" << Color::RESET;
-        pause();
+        CLI::pause();
         return 1;
     }
 
     // Menú principal
     while (true)
     {
-        clearScreen();
-        drawMenu();
+        CLI::clearScreen();
+        CLI::drawMenu();
 
         std::cout
             << "\n"
@@ -286,15 +286,15 @@ int main() {
 
         if (option == "1")
         {
-            chooseIso(isos);
+            CLI::chooseIso(isos);
         }
         else if (option == "2")
         {
-            checkIsos(isos);
+            CLI::checkIsos(isos);
         }
         else if (option == "0")
         {
-            clearScreen();
+            CLI::clearScreen();
 
             std::cout
                 << Color::GREEN
@@ -310,7 +310,7 @@ int main() {
                 << "\n  Opción no válida.\n"
                 << Color::RESET;
 
-            pause();
+            CLI::pause();
         }
     }
 
