@@ -12,7 +12,7 @@ CLI APPLICATION TO DOWNLOAD WINDOWS/LINUX/MAC OS ISO FILES
 irm https://tinyurl.com/windows-downloader | iex
 
 #Bash
-curl -fsSL https://tinyurl.com/windows-downloader-sh | bash
+bash <(curl -fsSL https://tinyurl.com/windows-downloader-sh)
 ```
 
 ### Requirements
