@@ -23,7 +23,7 @@ jobs:
         include:
           - os: windows-latest
             artifact_name: windows-downloader-windows.zip
-            triplet: x64-windows
+            triplet: x64-windows-static
           - os: ubuntu-latest
             artifact_name: windows-downloader-linux.tar.gz
             triplet: x64-linux
@@ -52,6 +52,7 @@ jobs:
         run: |
           cmake -B build -S . \
             -DCMAKE_BUILD_TYPE=Release \
+            -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} \
             -DCMAKE_TOOLCHAIN_FILE="$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
         shell: bash
 
