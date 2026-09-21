@@ -1,3 +1,9 @@
+# [v1.2.1] - 2026-09-21
+
+## add
+
+- fix dll include libcurl
+
 # [v1.2] - 2026-09-19
 
 ## Added
