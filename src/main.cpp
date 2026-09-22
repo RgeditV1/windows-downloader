@@ -1,8 +1,7 @@
-#include <iostream>
 #include <fstream>
-
 #include "downloader.hpp"
 #include "cli.hpp"
+
 
 CURL* curl = nullptr;
 CURLcode result;

@@ -1,11 +1,8 @@
 #pragma once
 
 #include <cstdlib>
-#include <cstdlib>
 #include <string>
 #include <vector>
-#include <sstream>
-#include <iomanip>
 #include <filesystem>
 
 #include <curl/curl.h>
