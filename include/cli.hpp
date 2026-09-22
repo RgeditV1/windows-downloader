@@ -5,11 +5,8 @@
 #endif
 
 #include <iostream>
-#include <string>
-#include <cstdlib>
-#include <thread>
 #include <atomic>
-#include <chrono>
+#include <thread>
 
 #ifdef _WIN32
 #include <conio.h>
