@@ -21,6 +21,7 @@ extern CURLcode result;
 extern std::string response; // Datos recibidos por Curl
 
 const std::string RAW = "https://raw.githubusercontent.com/RgeditV1/windows-downloader/main/iso.json";
+const std::string USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)";
 
 struct IsoInfo;
 
@@ -42,11 +43,15 @@ std::filesystem::path getDownloadsFolderPath();
 
 bool downloadIsoFile(const IsoInfo& iso, const std::filesystem::path& destinationFolder);
 
+enum class OSCategory { Windows, Linux, Unknown };
+
 struct IsoInfo {
     std::string title;
     std::string url;
     std::string language;
+    std::string date;
     std::string architecture;
     uint32_t build;
     uint64_t size;
+    OSCategory osType = OSCategory::Unknown;
 };
