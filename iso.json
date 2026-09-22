@@ -1,5 +1,5 @@
 {
-    "windows": [
+    "Windows": [
         {
             "title": "Windows 10 22H2",
             "link": "https://archive.org/download/windows-10-22h2-englishus/Win10_22H2_English_x64.iso",
@@ -58,13 +58,19 @@
             "language": "Spanish"
         }
     ],
+
     "Linux": [
         {
             "title": "Arch Linux",
-            "link": "",
-            "build": 0,
-            "architecture": "",
-            "language": ""
+            "mirror": "https://mirror.arizona.edu/archlinux/iso/latest/",
+            "architecture": "x86/x64",
+            "language": "Multi"
+        },
+        {
+            "title": "Debian Linux",
+            "mirror": "https://cdimage.debian.org/debian-cd/current/amd64/iso-dvd/",
+            "architecture": "x86/x64",
+            "language": "Multi"
         }
     ]
 }

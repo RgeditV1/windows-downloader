@@ -27,6 +27,7 @@ set(PROJECT_SOURCES
     src/cli.cpp
     include/cli.hpp
     include/downloader.hpp
+    include/fetch_iso.hpp
 )
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
