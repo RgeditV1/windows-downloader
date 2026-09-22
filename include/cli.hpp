@@ -7,6 +7,7 @@
 #include <iostream>
 #include <atomic>
 #include <thread>
+#include <vector>
 
 #ifdef _WIN32
 #include <conio.h>
@@ -26,26 +27,25 @@ namespace Color {
 }
 
 namespace MenuConfig {
-
-    constexpr const char* TITLE = "WINDOWS DOWNLOADER";
+    constexpr const char* TITLE = "WINDOWS-DOWNLOADER";
 
     constexpr int WIDTH = 38;
 
-    constexpr const char* OPTION_DOWNLOAD =
-        "Elegir ISO a descargar";
-
-    constexpr const char* OPTION_CHECK =
-        "Comprobar ISO disponibles";
-
-    constexpr const char* OPTION_EXIT =
-        "Salir";
+    constexpr const char* OPTION_DOWNLOAD_WINDOWS = "Elegir ISO Windows";
+    constexpr const char* OPTION_DOWNLOAD_LINUX   = "Elegir ISO Linux";
+    constexpr const char* OPTION_CHECK            = "Comprobar ISOs disponibles";
+    constexpr const char* OPTION_EXIT             = "Salir";
 }
 
-namespace CLI{
+namespace CLI {
     void clearScreen();
     void pause();
     void drawMenu();
     void showSpinner(const std::atomic<bool>& loading, const std::string& message);
-    void chooseIso(const std::vector<IsoInfo>& isos);
+    
+    // Filtrar y seleccionar por tipo de SO
+    void chooseIso(const std::vector<IsoInfo>& isos, OSCategory targetCategory);
+    
+    // Comprobar todas las ISOs disponibles
     void checkIsos(const std::vector<IsoInfo>& isos);
 }

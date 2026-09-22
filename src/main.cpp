@@ -1,13 +1,13 @@
 #include <fstream>
+
 #include "downloader.hpp"
 #include "cli.hpp"
+#include "fetch_iso.hpp"
 
 
 CURL* curl = nullptr;
 CURLcode result;
 std::string response;
-
-const std::string USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)";
 
 namespace fs = std::filesystem;
 
@@ -126,27 +126,46 @@ void InitCurl(){
     }
 }
 
-std::vector<IsoInfo> parseIsoInfo(const std::string& response)
-{
+std::vector<IsoInfo> parseIsoInfo(const std::string& response) {
     std::vector<IsoInfo> isos;
-
     json data = json::parse(response);
 
-    for (const auto& item : data)
-    {
-        IsoInfo iso;
+    std::unordered_map<std::string, OSCategory> osMap = {
+        {"Windows", OSCategory::Windows},
+        {"Linux",   OSCategory::Linux}
+    };
 
-        iso.title = item.value("title", "");
-        iso.url = item.value("link", "");
-        iso.language = item.value("language", "");
-        iso.architecture = item.value("architecture", "");
-        iso.build = item.value("build", 0);
+    for (auto& [categoryKey, itemArray] : data.items()) {
+        OSCategory currentCategory = osMap.count(categoryKey) 
+                                     ? osMap[categoryKey] 
+                                     : OSCategory::Unknown;
 
-        iso.size = getRemoteFileSize(iso.url);
+        for (const auto& item : itemArray) {
+            IsoInfo iso;
+            iso.title = item.value("title", "");
+            iso.language = item.value("language", "");
+            iso.architecture = item.value("architecture", "");
+            iso.osType = currentCategory;
 
-        isos.push_back(iso);
+            if (currentCategory == OSCategory::Windows) {
+                iso.url = item.value("link", "");
+                iso.build = item.value("build", 0);
+            } 
+            else if (currentCategory == OSCategory::Linux) {
+                std::string mirrorUrl = item.value("mirror", "");
+
+                auto [scrapedUrl, scrapedDate] = ScrapeIsoUrl(iso.title, mirrorUrl);
+                
+                iso.url = scrapedUrl;
+                iso.date = scrapedDate;
+            }
+
+            if (!iso.url.empty()) {
+                iso.size = getRemoteFileSize(iso.url);
+            }
+            isos.push_back(iso);
+        }
     }
-
     return isos;
 }
 
@@ -285,9 +304,13 @@ int main() {
 
         if (option == "1")
         {
-            CLI::chooseIso(isos);
+            CLI::chooseIso(isos, OSCategory::Windows);
         }
         else if (option == "2")
+        {
+            CLI::chooseIso(isos, OSCategory::Linux);
+        }
+        else if (option == "3")
         {
             CLI::checkIsos(isos);
         }

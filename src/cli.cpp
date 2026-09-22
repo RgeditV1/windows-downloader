@@ -1,6 +1,6 @@
 #include "cli.hpp"
 
-namespace CLI{
+namespace CLI {
     void pause()
     {
         std::cout << "\n"
@@ -19,7 +19,7 @@ namespace CLI{
     void drawMenu()
     {
         constexpr int width = 38;
-        constexpr std::string_view title = "WINDOWS DOWNLOADER";
+        constexpr std::string_view title = MenuConfig::TITLE;
 
         int padding = (width - 2 - static_cast<int>(title.size())) / 2;
 
@@ -34,10 +34,11 @@ namespace CLI{
 
         std::cout << "╠══════════════════════════════════════╣\n\n";
 
-        std::cout << "   [1] Elegir ISO a descargar\n";
-        std::cout << "   [2] Comprobar ISO disponibles\n";
+        std::cout << "   [1] " << MenuConfig::OPTION_DOWNLOAD_WINDOWS << "\n";
+        std::cout << "   [2] " << MenuConfig::OPTION_DOWNLOAD_LINUX << "\n";
+        std::cout << "   [3] " << MenuConfig::OPTION_CHECK << "\n";
         std::cout << Color::RED
-                << "   [0] Salir\n\n"
+                << "   [0] " << MenuConfig::OPTION_EXIT << "\n\n"
                 << Color::RESET;
 
         std::cout << "╚══════════════════════════════════════╝\n";
@@ -63,16 +64,19 @@ namespace CLI{
             {
                 const auto& iso = isos[i];
 
-                // Título principal en blanco negrita
+                // Título principal
                 std::cout << Color::WHITE << Color::BOLD << "  • " << iso.title << Color::RESET;
 
-                // Build entre paréntesis en azul/cyan
-                if (iso.build > 0)
+                if (iso.osType == OSCategory::Windows && iso.build > 0)
                 {
-                    std::cout << Color::BLUE << " (" << iso.build << ")" << Color::RESET;
+                    std::cout << Color::BLUE << " (Build " << iso.build << ")" << Color::RESET;
+                }
+                else if (iso.osType == OSCategory::Linux && !iso.date.empty())
+                {
+                    std::cout << Color::CYAN << " (" << iso.date << ")" << Color::RESET;
                 }
 
-                // Detalles extra (Arquitectura / Idioma) si existen
+                // Detalles de Arquitectura e Idioma
                 if (!iso.architecture.empty() || !iso.language.empty())
                 {
                     std::cout << Color::YELLOW << " [" << iso.architecture 
@@ -80,7 +84,6 @@ namespace CLI{
                             << iso.language << "]" << Color::RESET;
                 }
 
-                // Tamaño resaltado en verde al final
                 std::cout << " - " << Color::GREEN << Color::BOLD << formatFileSize(iso.size) << Color::RESET << "\n";
             }
         }
@@ -99,34 +102,57 @@ namespace CLI{
         #endif
     }
 
-    void chooseIso(const std::vector<IsoInfo>& isos)
+    void chooseIso(const std::vector<IsoInfo>& isos, OSCategory targetCategory)
     {
         clearScreen();
+
+        std::string categoryTitle = (targetCategory == OSCategory::Windows) ? "Windows" : "Linux";
 
         std::cout
             << Color::CYAN
             << Color::BOLD
-            << "\n=== Elegir ISO a descargar ===\n\n"
+            << "\n=== Elegir ISO de " << categoryTitle << " a descargar ===\n\n"
             << Color::RESET;
 
-        if (isos.empty())
+        // Filtrar según la categoría solicitada
+        std::vector<IsoInfo> filteredIsos;
+        for (const auto& iso : isos)
         {
-            std::cout << Color::RED << "No hay ISOs disponibles para descargar.\n" << Color::RESET;
+            if (iso.osType == targetCategory)
+            {
+                filteredIsos.push_back(iso);
+            }
+        }
+
+        if (filteredIsos.empty())
+        {
+            std::cout << Color::RED << "No hay ISOs de " << categoryTitle << " disponibles para descargar.\n" << Color::RESET;
             pause();
             return;
         }
 
-        for (size_t i = 0; i < isos.size(); ++i)
+        for (size_t i = 0; i < filteredIsos.size(); ++i)
         {
+            const auto& iso = filteredIsos[i];
+
             std::cout << Color::YELLOW << "  [" << (i + 1) << "] " << Color::RESET
-                    << Color::WHITE << Color::BOLD << isos[i].title << Color::RESET
-                    << Color::BLUE << " (" << isos[i].build << ")" << Color::RESET
-                    << Color::CYAN << " - [" << isos[i].architecture << "]" << Color::RESET
-                    << " - " << Color::GREEN << formatFileSize(isos[i].size) << Color::RESET
+                    << Color::WHITE << Color::BOLD << iso.title << Color::RESET;
+
+            if (iso.osType == OSCategory::Windows && iso.build > 0)
+            {
+                std::cout << Color::BLUE << " (Build " << iso.build << ")" << Color::RESET;
+            }
+            else if (iso.osType == OSCategory::Linux && !iso.date.empty())
+            {
+                std::cout << Color::CYAN << " (" << iso.date << ")" << Color::RESET;
+            }
+
+            std::cout << Color::CYAN << " - [" << iso.architecture << "]" << Color::RESET
+                    << " - " << Color::GREEN << formatFileSize(iso.size) << Color::RESET
                     << "\n";
         }
 
-        std::cout << Color::RED << "  [0] Cancelar y volver al menú\n\n" << Color::RESET;
+        std::cout << Color::RED << "\n  [0] Cancelar y volver al menú\n\n" << Color::RESET;
 
         std::cout << Color::CYAN << "  Selecciona una opción > " << Color::RESET;
         std::string input;
@@ -136,9 +162,9 @@ namespace CLI{
         {
             int index = std::stoi(input);
 
-            if (index > 0 && static_cast<size_t>(index) <= isos.size())
+            if (index > 0 && static_cast<size_t>(index) <= filteredIsos.size())
             {
-                const auto& selectedIso = isos[index - 1];
+                const auto& selectedIso = filteredIsos[index - 1];
                 
                 std::cout << "\n" << Color::GREEN << "Has seleccionado: " << Color::WHITE << Color::BOLD << selectedIso.title << Color::RESET << "\n";
                 
@@ -174,10 +200,9 @@ namespace CLI{
 
     void showSpinner(const std::atomic<bool>& loading, const std::string& message)
     {
-        const char frames[] = {'|', '/', '-', '\\'}; // mas claro [|,/,-,\]
+        const char frames[] = {'|', '/', '-', '\\'};
         size_t index = 0;
 
-        // Ocultar el cursor en la consola
         std::cout << "\033[?25l";
 
         while (loading.load())
@@ -188,7 +213,6 @@ namespace CLI{
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
 
-        // Limpiar la línea y volver a mostrar el cursor
         std::cout << "\r\033[K" << "\033[?25h" << std::flush;
     }
 
