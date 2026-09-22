@@ -1,59 +1,70 @@
-[
-    {
-        "title": "Windows 10 22H2",
-        "link": "https://archive.org/download/windows-10-22h2-englishus/Win10_22H2_English_x64.iso",
-        "build": 19045,
-        "architecture": "x64",
-        "language": "English"
-    },
-    {
-        "title": "Windows 11 25H2",
-        "link": "https://archive.org/download/win1125H2_official/MCT_Win11_25H2_English_x64.iso",
-        "build": 26200,
-        "architecture": "x64",
-        "language": "English"
-    },
-    {
-        "title": "Windows 8.1",
-        "link": "https://archive.org/download/win-8.1-english-x-64_20211019/Win8.1_English_x64.iso",
-        "build": 0,
-        "architecture": "x64",
-        "language": "English"
-
-    },
-    {
-        "title": "Windows 8.1",
-        "link": "https://archive.org/download/win-8.1-english-x-64_20211019/Win8.1_English_x32.iso",
-        "build": 0,
-        "architecture": "x86",
-        "language": "English"
-    },
-    {
-        "title": "Windows 7 ultimate Service Pack 1",
-        "link": "https://archive.org/download/windows-7-ultimate-sp1-x86-x64/Windows%207%20Ultimate%20SP1%20x64.iso",
-        "build": 7601,
-        "architecture": "x64",
-        "language": "English"
-    },
-    {
-        "title": "Windows 7 ultimate Service Pack 1",
-        "link": "https://archive.org/download/windows-7-ultimate-sp1-x86-x64/Windows%207%20Ultimate%20SP1%20x86.iso",
-        "build": 7601,
-        "architecture": "x86",
-        "language": "English"
-    },
+{
+    "windows": [
         {
-        "title": "Windows Vista All in One",
-        "link": "https://archive.org/download/VistatotalESP/Vistatotal.iso",
-        "build": 0,
-        "architecture": "x86/x64",
-        "language": "Spanish"
-    },
-    {
-        "title": "Windows xp Professional Service Pack 3",
-        "link": "https://archive.org/download/es_windows_xp_professional_with_service_pack_3_x86_cd_vl_x14-74009_202203/es_windows_xp_professional_with_service_pack_3_x86_cd_vl_x14-74009.iso",
-        "build": 0,
-        "architecture": "x86",
-        "language": "Spanish"
-    }
-]
+            "title": "Windows 10 22H2",
+            "link": "https://archive.org/download/windows-10-22h2-englishus/Win10_22H2_English_x64.iso",
+            "build": 19045,
+            "architecture": "x64",
+            "language": "English"
+        },
+        {
+            "title": "Windows 11 25H2",
+            "link": "https://archive.org/download/win1125H2_official/MCT_Win11_25H2_English_x64.iso",
+            "build": 26200,
+            "architecture": "x64",
+            "language": "English"
+        },
+        {
+            "title": "Windows 8.1",
+            "link": "https://archive.org/download/win-8.1-english-x-64_20211019/Win8.1_English_x64.iso",
+            "build": 0,
+            "architecture": "x64",
+            "language": "English"
+
+        },
+        {
+            "title": "Windows 8.1",
+            "link": "https://archive.org/download/win-8.1-english-x-64_20211019/Win8.1_English_x32.iso",
+            "build": 0,
+            "architecture": "x86",
+            "language": "English"
+        },
+        {
+            "title": "Windows 7 ultimate Service Pack 1",
+            "link": "https://archive.org/download/windows-7-ultimate-sp1-x86-x64/Windows%207%20Ultimate%20SP1%20x64.iso",
+            "build": 7601,
+            "architecture": "x64",
+            "language": "English"
+        },
+        {
+            "title": "Windows 7 ultimate Service Pack 1",
+            "link": "https://archive.org/download/windows-7-ultimate-sp1-x86-x64/Windows%207%20Ultimate%20SP1%20x86.iso",
+            "build": 7601,
+            "architecture": "x86",
+            "language": "English"
+        },
+            {
+            "title": "Windows Vista All in One",
+            "link": "https://archive.org/download/VistatotalESP/Vistatotal.iso",
+            "build": 0,
+            "architecture": "x86/x64",
+            "language": "Spanish"
+        },
+        {
+            "title": "Windows xp Professional Service Pack 3",
+            "link": "https://archive.org/download/es_windows_xp_professional_with_service_pack_3_x86_cd_vl_x14-74009_202203/es_windows_xp_professional_with_service_pack_3_x86_cd_vl_x14-74009.iso",
+            "build": 0,
+            "architecture": "x86",
+            "language": "Spanish"
+        }
+    ],
+    "Linux": [
+        {
+            "title": "Arch Linux",
+            "link": "",
+            "build": 0,
+            "architecture": "",
+            "language": ""
+        }
+    ]
+}
