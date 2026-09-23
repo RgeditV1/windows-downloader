@@ -1,6 +1,12 @@
+# [v1.3] - 2026-09-22
+
+## Added
+
+- Linux Section, download your Linux Iso And Windows
+
 # [v1.2.1] - 2026-09-21
 
-## add
+## Fix
 
 - fix dll include libcurl
 
